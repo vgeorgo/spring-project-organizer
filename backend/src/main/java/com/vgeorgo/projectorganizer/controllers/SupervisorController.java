@@ -18,7 +18,7 @@ public class SupervisorController {
 
     private User loadResource(Long id) {
         return repository.findByIdAndType(id, User.SUPERVISOR)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
     }
 
     @GetMapping("/supervisors")
@@ -40,13 +40,12 @@ public class SupervisorController {
     @PutMapping("/supervisors/{id}")
     public User update(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
         User updateUser = loadResource(id);
-
         updateUser.setName(user.getName());
         updateUser.setType(user.getType());
         updateUser.setAsSupervisor();
 
         updateUser = repository.save(updateUser);
-        return updateUser;
+        return repository.refresh(updateUser);
     }
 
     @DeleteMapping("/supervisors/{id}")

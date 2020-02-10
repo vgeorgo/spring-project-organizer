@@ -40,7 +40,9 @@ public class User  implements Serializable {
     @Setter
     private String type;
 
-    @Column(name = "supervisor_id", nullable = true)
+    @OneToOne
+    @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
+    @RestResource(path = "supervisor", rel="supervisor")
     @Getter
     @Setter
     private User supervisor;

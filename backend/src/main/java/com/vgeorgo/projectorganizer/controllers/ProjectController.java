@@ -43,7 +43,7 @@ public class ProjectController {
         updateProject.setName(project.getName());
 
         updateProject = repository.save(updateProject);
-        return updateProject;
+        return repository.refresh(updateProject);
     }
 
     @DeleteMapping("/projects/{id}")

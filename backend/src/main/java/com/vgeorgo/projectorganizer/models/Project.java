@@ -32,7 +32,9 @@ public class Project  implements Serializable {
     @Setter
     private String name;
 
-    @Column(name = "leader_id", nullable = true)
+    @OneToOne
+    @JoinColumn(name = "leader_id", referencedColumnName = "id")
+    @RestResource(path = "leader", rel="leader")
     @Getter
     @Setter
     private User leader;
