@@ -2,6 +2,7 @@ package com.vgeorgo.projectorganizer.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vgeorgo.projectorganizer.validators.user.SupervisorValidation;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -37,6 +38,7 @@ public class Project  implements Serializable {
     @RestResource(path = "leader", rel="leader")
     @Getter
     @Setter
+    @SupervisorValidation
     private User leader;
 
     @Column(nullable = false, updatable = false)

@@ -23,26 +23,6 @@ public class DeveloperController {
                 .orElseThrow(() -> new ResourceNotFoundException("Developer", "id", id));
     }
 
-    /**
-     * Handles validation of supervisor when creating/updating
-     * @param loaded Entity being updated
-     * @param update Entity on the request body
-     */
-    private void handleSupervisor(User loaded, User update) {
-        // Sets the supervisor if the parameter exists
-        if(update.getSupervisor() != null) {
-            // Blocks supervisor with the same id
-            if(loaded.getId() != null && loaded.getId().equals(update.getSupervisor().getId())) {
-                throw new BadRequestException("User can not be his own supervisor", "supervisor", update.getSupervisor().getId());
-            }
-
-            // Validates if the user really is a supervisor
-            User supervisor = repository.findByIdAndType(update.getSupervisor().getId(), User.SUPERVISOR)
-                    .orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", update.getSupervisor().getId()));
-            loaded.setSupervisor(supervisor);
-        }
-    }
-
     @GetMapping("/developers")
     public List<User> all() {
         return repository.findAllByType(User.DEVELOPER);
@@ -51,7 +31,6 @@ public class DeveloperController {
     @PostMapping("/developers")
     public User create(@Valid @RequestBody User user) {
         user.setAsDeveloper();
-        handleSupervisor(user, user);
         return repository.save(user);
     }
 
@@ -67,7 +46,8 @@ public class DeveloperController {
         updateUser.setType(user.getType());
         updateUser.setAsDeveloper();
 
-        handleSupervisor(updateUser, user);
+        // Relations
+        updateUser.setSupervisor(user.getSupervisor());
 
         updateUser = repository.save(updateUser);
         return repository.refresh(updateUser);

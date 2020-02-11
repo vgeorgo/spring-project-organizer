@@ -2,6 +2,7 @@ package com.vgeorgo.projectorganizer.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vgeorgo.projectorganizer.validators.user.SupervisorValidation;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,6 +12,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -45,6 +47,7 @@ public class User  implements Serializable {
     @RestResource(path = "supervisor", rel="supervisor")
     @Getter
     @Setter
+    @SupervisorValidation
     private User supervisor;
 
     @Column(nullable = false, updatable = false)

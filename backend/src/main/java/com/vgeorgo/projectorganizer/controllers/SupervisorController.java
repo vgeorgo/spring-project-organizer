@@ -29,6 +29,7 @@ public class SupervisorController {
     @PostMapping("/supervisors")
     public User create(@Valid @RequestBody User user) {
         user.setAsSupervisor();
+        user.setSupervisor(null);
         return repository.save(user);
     }
 
