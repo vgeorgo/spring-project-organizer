@@ -1,6 +1,7 @@
 package com.vgeorgo.projectorganizer.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vgeorgo.projectorganizer.validators.user.SupervisorValidation;
 import lombok.Getter;
@@ -14,14 +15,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
+@JsonIgnoreProperties(value = {"developer"})
 public class User  implements Serializable {
     public static final String SUPERVISOR = "supervisor";
     public static final String DEVELOPER = "developer";
@@ -45,6 +44,7 @@ public class User  implements Serializable {
     @OneToOne
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     @RestResource(path = "supervisor", rel="supervisor")
+    @JsonIgnoreProperties(value = {"supervisor","projects"})
     @Getter
     @Setter
     @SupervisorValidation
@@ -62,16 +62,12 @@ public class User  implements Serializable {
     @Getter
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("users")
+    @ManyToMany(mappedBy = "developers", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"developers","leader"})
     @RestResource(path = "projects")
-    @JoinTable(name = "UserProject",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
-            uniqueConstraints={@UniqueConstraint(columnNames={"user_id", "project_id"})})
     @Getter
     @Setter
-    private Set<Project> projects = new HashSet<Project>();
+    private List<Project> projects = new ArrayList<Project>();
 
     /**
      * Set the type of the User as Supervisor
@@ -86,4 +82,14 @@ public class User  implements Serializable {
     public void setAsDeveloper() {
         type = User.DEVELOPER;
     }
+
+    /**
+     * @return True if the user is a Supervisor
+     */
+    public boolean isSupervisor() { return type.equals(User.SUPERVISOR); }
+
+    /**
+     * @return True if the user is a Developer
+     */
+    public boolean isDeveloper() { return type.equals(User.DEVELOPER); }
 }

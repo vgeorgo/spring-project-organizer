@@ -13,9 +13,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "projects")
@@ -36,9 +34,9 @@ public class Project  implements Serializable {
     @OneToOne
     @JoinColumn(name = "leader_id", referencedColumnName = "id")
     @RestResource(path = "leader", rel="leader")
+    @JsonIgnoreProperties(value = {"supervisor","projects"})
     @Getter
     @Setter
-    @SupervisorValidation
     private User leader;
 
     @Column(nullable = false, updatable = false)
@@ -53,14 +51,26 @@ public class Project  implements Serializable {
     @Getter
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("projects")
-    @RestResource(path = "users")
-    @JoinTable(name = "UserProject",
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"projects","supervisor"})
+    @RestResource(path = "developers")
+    @JoinTable(name = "user_project",
             joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             uniqueConstraints={@UniqueConstraint(columnNames={"project_id", "user_id"})})
     @Getter
     @Setter
-    private Set<User> users = new HashSet<User>();
+    private List<User> developers = new ArrayList<User>();
+
+    public void addDeveloper(User dev) {
+        for(User user : developers) {
+            if(user.getId().equals(dev.getId()))
+                return;
+        }
+        developers.add(dev);
+    }
+
+    public void deleteDeveloper(User dev) {
+        developers.removeIf(u -> u.getId().equals(dev.getId()));
+    }
 }
