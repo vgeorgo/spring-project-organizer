@@ -1,28 +1,42 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+  <div id="wrapper">
+    <Menu></Menu>
+
+    <div class="main-content">
+      <div class="main-content__top">
+          <h1 class="main-content__title">
+              {{ sectionName }}
+          </h1>
+      </div>
+      <div class="main-content__body">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import startCase from 'lodash/startCase';
+import Menu from './components/Menu.vue';
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    Menu,
+  },
+  computed: {
+    sectionName() {
+      return startCase(this.$route.name);
+    },
+  },
+};
+
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+@import 'styles/layout.scss';
+@import 'styles/menu.scss';
+@import 'styles/media-queries.scss';
 </style>
