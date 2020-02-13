@@ -2,7 +2,8 @@
 
   <Grid
     :gridData="gridData"
-    :columns="gridColumns">
+    :columns="gridColumns"
+    :baseRoute="'/projects'">
   </Grid>
 
 </template>
@@ -13,7 +14,7 @@ import Grid from '../../components/Grid.vue';
 import Api from '../../config/api';
 
 export default {
-  name: 'projectsView',
+  name: 'projectsList',
   components: {
     Grid,
   },

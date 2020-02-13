@@ -13,7 +13,10 @@
       <tbody>
         <tr v-for="entry in gridData" v-bind:key="entry.id">
           <td v-for="key in columns" v-bind:key="key">
-            {{entry[key]}}
+            <router-link v-if="key == 'id'" v-bind:to="`${baseRoute}/${entry[key]}`">
+              {{entry[key]}}
+            </router-link>
+            <span v-else>{{entry[key]}}</span>
           </td>
         </tr>
       </tbody>
@@ -28,7 +31,7 @@ export default {
   props: {
     gridData: Array,
     columns: Array,
-    filterKey: String,
+    baseRoute: String,
   },
   filters: {
     capitalize(str) {
@@ -36,7 +39,6 @@ export default {
     },
   },
   methods: {
-
   },
 };
 </script>

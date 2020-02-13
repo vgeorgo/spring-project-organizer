@@ -24,3 +24,27 @@ body {
 .main-content__body {
   margin-top: 80px;
 }
+
+h5 {
+  margin: 20px 0px;
+}
+
+.form-group-container {
+  flex: 1;
+  flex-direction: row;
+}
+
+.form-group {
+  float: left;
+  margin-right: 30px;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
