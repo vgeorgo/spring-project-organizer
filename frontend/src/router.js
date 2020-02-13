@@ -23,7 +23,7 @@ export default new Router({
       component: UsersList,
     },
     {
-      path: '/users/:id',
+      path: '/users/:id/view',
       name: 'users View',
       component: UsersView,
     },
@@ -33,7 +33,7 @@ export default new Router({
       component: ProjectsList,
     },
     {
-      path: '/projects/:id',
+      path: '/projects/:id/view',
       name: 'projects View',
       component: ProjectsView,
     },

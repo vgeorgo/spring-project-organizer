@@ -13,9 +13,14 @@
       <tbody>
         <tr v-for="entry in gridData" v-bind:key="entry.id">
           <td v-for="key in columns" v-bind:key="key">
-            <router-link v-if="key == 'id'" v-bind:to="`${baseRoute}/${entry[key]}`">
-              {{entry[key]}}
-            </router-link>
+            <span v-if="key == 'id'">
+              <router-link v-bind:to="`${baseRoute}/${entry[key]}/view`">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+              </router-link>
+              <router-link v-bind:to="`${baseRoute}/${entry[key]}/edit`">
+                <i class="fa fa-edit" aria-hidden="true"></i>
+              </router-link>
+            </span>
             <span v-else>{{entry[key]}}</span>
           </td>
         </tr>

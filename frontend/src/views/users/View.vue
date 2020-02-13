@@ -3,12 +3,16 @@
   <div class="user-container" v-if="user !== null">
     <h5>User information</h5>
     <div class="form-group-container">
-      <div class="user-name form-group">
-        <label>Name: </label>
+      <div class="form-group">
+        <label for="user_name">Name: </label><br />
         {{ user.name }}
       </div>
+      <div class="form-group">
+        <label for="user_type">Type: </label><br />
+        {{ user.type }}
+      </div>
       <div v-if="user.supervisor !== null" class="user-name form-group">
-        <label>Supervisor: </label>
+        <label>Supervisor: </label><br />
         {{ user.supervisor.name }}
       </div>
     </div>
@@ -43,7 +47,9 @@ export default {
       .then((response) => { this.user = response.data; });
   },
   methods: {
+    save() {
 
+    },
   },
 };
 
