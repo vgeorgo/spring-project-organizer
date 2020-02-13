@@ -5,6 +5,7 @@ import UsersList from './views/users/List.vue';
 import UsersView from './views/users/View.vue';
 import ProjectsList from './views/projects/List.vue';
 import ProjectsView from './views/projects/View.vue';
+import ProjectsForm from './views/projects/Form.vue';
 
 Vue.use(Router);
 
@@ -23,7 +24,7 @@ export default new Router({
       component: UsersList,
     },
     {
-      path: '/users/:id/view',
+      path: '/users/:id',
       name: 'users View',
       component: UsersView,
     },
@@ -33,9 +34,19 @@ export default new Router({
       component: ProjectsList,
     },
     {
-      path: '/projects/:id/view',
+      path: '/projects/:id',
       name: 'projects View',
       component: ProjectsView,
+    },
+    {
+      path: '/projects/create',
+      name: 'projects Create',
+      component: ProjectsForm,
+    },
+    {
+      path: '/projects/:id/edit',
+      name: 'projects Edit',
+      component: ProjectsForm,
     },
   ],
 });

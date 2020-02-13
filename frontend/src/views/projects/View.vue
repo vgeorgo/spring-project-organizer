@@ -3,12 +3,12 @@
   <div class="project-container" v-if="project !== null">
     <h5>Project information</h5>
     <div class="form-group-container">
-      <div class="project-name form-group">
-        <label>Name: </label>
+      <div class="form-group">
+        <label>Name: </label><br/>
         {{ project.name }}
       </div>
       <div v-if="project.leader !== null" class="project-name form-group">
-        <label>Leader: </label>
+        <label>Leader: </label><br/>
         {{ project.leader.name }}
       </div>
     </div>
