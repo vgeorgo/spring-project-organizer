@@ -26,34 +26,8 @@ public class SupervisorController {
         return repository.findAllByType(User.SUPERVISOR);
     }
 
-    @PostMapping("/supervisors")
-    public User create(@Valid @RequestBody User user) {
-        user.setAsSupervisor();
-        user.setSupervisor(null);
-        return repository.save(user);
-    }
-
     @GetMapping("/supervisors/{id}")
     public User find(@PathVariable(value = "id") Long id) {
         return loadResource(id);
-    }
-
-    @PutMapping("/supervisors/{id}")
-    public User update(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
-        User updateUser = loadResource(id);
-        updateUser.setName(user.getName());
-        updateUser.setType(user.getType());
-        updateUser.setAsSupervisor();
-
-        updateUser = repository.save(updateUser);
-        return repository.refresh(updateUser);
-    }
-
-    @DeleteMapping("/supervisors/{id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-        User user = loadResource(id);
-        repository.delete(user);
-
-        return ResponseEntity.ok().build();
     }
 }

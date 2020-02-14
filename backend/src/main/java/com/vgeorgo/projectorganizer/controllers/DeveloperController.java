@@ -28,36 +28,8 @@ public class DeveloperController {
         return repository.findAllByType(User.DEVELOPER);
     }
 
-    @PostMapping("/developers")
-    public User create(@Valid @RequestBody User user) {
-        user.setAsDeveloper();
-        return repository.save(user);
-    }
-
     @GetMapping("/developers/{id}")
     public User find(@PathVariable(value = "id") Long id) {
         return loadResource(id);
-    }
-
-    @PutMapping("/developers/{id}")
-    public User update(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
-        User updateUser = loadResource(id);
-        updateUser.setName(user.getName());
-        updateUser.setType(user.getType());
-        updateUser.setAsDeveloper();
-
-        // Relations
-        updateUser.setSupervisor(user.getSupervisor());
-
-        updateUser = repository.save(updateUser);
-        return repository.refresh(updateUser);
-    }
-
-    @DeleteMapping("/developers/{id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-        User user = loadResource(id);
-        repository.delete(user);
-
-        return ResponseEntity.ok().build();
     }
 }

@@ -26,14 +26,14 @@ public class ProjectController {
         return repository.findAll();
     }
 
-    @PostMapping("/projects")
-    public Project create(@Valid @RequestBody Project project) {
-        return repository.save(project);
-    }
-
     @GetMapping("/projects/{id}")
     public Project find(@PathVariable(value = "id") Long id) {
         return loadResource(id);
+    }
+
+    @PostMapping("/projects")
+    public Project store(@Valid @RequestBody Project project) {
+        return repository.save(project);
     }
 
     @PutMapping("/projects/{id}")
@@ -41,6 +41,8 @@ public class ProjectController {
         Project updateProject = loadResource(id);
 
         updateProject.setName(project.getName());
+        // Relations
+        updateProject.setLeader(project.getLeader());
 
         updateProject = repository.save(updateProject);
         return repository.refresh(updateProject);

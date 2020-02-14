@@ -4,11 +4,10 @@ import com.vgeorgo.projectorganizer.exceptions.business.ResourceNotFoundExceptio
 import com.vgeorgo.projectorganizer.models.User;
 import com.vgeorgo.projectorganizer.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +18,7 @@ public class UserController {
 
     private User loadResource(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+            .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     }
 
     @GetMapping("/users")
@@ -30,5 +29,31 @@ public class UserController {
     @GetMapping("/users/{id}")
     public User find(@PathVariable(value = "id") Long id) {
         return loadResource(id);
+    }
+
+    @PostMapping("/users")
+    public User store(@Valid @RequestBody User user) {
+        return repository.save(user);
+    }
+
+    @PutMapping("/users/{id}")
+    public User update(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
+        User updateUser = loadResource(id);
+        updateUser.setName(user.getName());
+        updateUser.setType(user.getType());
+
+        // Relations
+        updateUser.setSupervisor(user.getSupervisor());
+
+        updateUser = repository.save(updateUser);
+        return repository.refresh(updateUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+        User user = loadResource(id);
+
+        repository.delete(user);
+        return ResponseEntity.ok().build();
     }
 }

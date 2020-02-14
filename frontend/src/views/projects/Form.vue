@@ -10,7 +10,7 @@
       <div class="form-group">
         <label>Leader: </label><br/>
         <select v-model="project.leader.id">
-          <option value=""></option>
+          <option value="">Select</option>
           <option v-bind:key="leader.id" v-for="leader in leaders" :value="leader.id">
             {{leader.name}}
           </option>
