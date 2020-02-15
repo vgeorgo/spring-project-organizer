@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="clearfix"></div>
-    <button type="button" v-on:click="save">Save</button>
+    <button type="button" class="btn btn-success btn-sm" v-on:click="save">Save</button>
   </div>
 
 </template>
@@ -55,7 +55,10 @@ export default {
     loadProject() {
       Api
         .get(`/projects/${this.$route.params.id}`)
-        .then((response) => { this.project = response.data; });
+        .then((response) => {
+          this.project = response.data;
+          if (!this.project.leader) { this.project.leader = { id: null }; }
+        });
     },
     save() {
       const params = {

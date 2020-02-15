@@ -1,6 +1,7 @@
 <template>
 
   <div class="project-container" v-if="project !== null">
+    <ActionBar :actions="actions" />
     <h5>Project information</h5>
     <div class="form-group-container">
       <div class="form-group">
@@ -29,9 +30,13 @@
 <script>
 
 import Api from '../../config/api';
+import ActionBar from '../../components/ActionBar.vue';
 
 export default {
   name: 'projectsView',
+  components: {
+    ActionBar,
+  },
   data() {
     return {
       project: null,
@@ -42,8 +47,13 @@ export default {
       .get(`/projects/${this.$route.params.id}`)
       .then((response) => { this.project = response.data; });
   },
-  methods: {
-
+  computed: {
+    actions() {
+      return [
+        { route: '/projects', type: 'primary', label: 'Admin' },
+        { route: `/projects/${this.project.id}/edit`, type: 'primary', label: 'Edit' },
+      ];
+    },
   },
 };
 

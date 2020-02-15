@@ -37,6 +37,5 @@ export default {
 
 <style lang="scss">
 @import 'styles/layout.scss';
-@import 'styles/menu.scss';
 @import 'styles/media-queries.scss';
 </style>

@@ -1,22 +1,27 @@
 <template>
 
-  <Grid
-    :gridData="gridData"
-    :columns="gridColumns"
-    :baseRoute="'/users'">
-  </Grid>
+  <div>
+    <ActionBar :actions="actions" />
+    <Grid
+      :gridData="gridData"
+      :columns="gridColumns"
+      :baseRoute="'/users'">
+    </Grid>
+  </div>
 
 </template>
 
 <script>
 
 import Grid from '../../components/Grid.vue';
+import ActionBar from '../../components/ActionBar.vue';
 import Api from '../../config/api';
 
 export default {
   name: 'usersList',
   components: {
     Grid,
+    ActionBar,
   },
   data() {
     return {
@@ -29,8 +34,12 @@ export default {
       .get('/users')
       .then((response) => { this.gridData = response.data; });
   },
-  methods: {
-
+  computed: {
+    actions() {
+      return [
+        { route: '/users/create', type: 'primary', label: 'Create' },
+      ];
+    },
   },
 };
 

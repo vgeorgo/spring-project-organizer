@@ -25,39 +25,39 @@ export default new Router({
       component: UsersList,
     },
     {
-      path: '/users/:id',
-      name: 'users View',
-      component: UsersView,
-    },
-    {
       path: '/users/create',
-      name: 'users Create',
+      name: 'User Create',
       component: UsersForm,
     },
     {
       path: '/users/:id/edit',
-      name: 'users Edit',
+      name: 'User Edit',
       component: UsersForm,
     },
     {
+      path: '/users/:id',
+      name: 'User View',
+      component: UsersView,
+    },
+    {
       path: '/projects',
-      name: 'projects',
+      name: 'Projects',
       component: ProjectsList,
     },
     {
-      path: '/projects/:id',
-      name: 'projects View',
-      component: ProjectsView,
-    },
-    {
       path: '/projects/create',
-      name: 'projects Create',
+      name: 'Project Create',
       component: ProjectsForm,
     },
     {
       path: '/projects/:id/edit',
-      name: 'projects Edit',
+      name: 'Project Edit',
       component: ProjectsForm,
+    },
+    {
+      path: '/projects/:id',
+      name: 'Project View',
+      component: ProjectsView,
     },
   ],
 });

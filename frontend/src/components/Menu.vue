@@ -54,3 +54,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import '../styles/menu.scss';
+</style>

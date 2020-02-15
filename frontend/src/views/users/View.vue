@@ -1,6 +1,7 @@
 <template>
 
   <div class="user-container" v-if="user !== null">
+    <ActionBar :actions="actions" />
     <h5>User information</h5>
     <div class="form-group-container">
       <div class="form-group">
@@ -33,9 +34,13 @@
 <script>
 
 import Api from '../../config/api';
+import ActionBar from '../../components/ActionBar.vue';
 
 export default {
   name: 'usersView',
+  components: {
+    ActionBar,
+  },
   data() {
     return {
       user: null,
@@ -46,9 +51,12 @@ export default {
       .get(`/users/${this.$route.params.id}`)
       .then((response) => { this.user = response.data; });
   },
-  methods: {
-    save() {
-
+  computed: {
+    actions() {
+      return [
+        { route: '/users', type: 'primary', label: 'Admin' },
+        { route: `/users/${this.user.id}/edit`, type: 'primary', label: 'Edit' },
+      ];
     },
   },
 };
