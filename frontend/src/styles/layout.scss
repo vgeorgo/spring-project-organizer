@@ -57,3 +57,17 @@ h5 {
 .main-content__body h5 {
   text-decoration: underline;
 }
+
+.user-projects {
+  display: flex;
+  flex-direction: row;
+}
+
+.user-projects li {
+  margin-bottom: 5px;
+}
+
+.user-projects .list-projects-container {
+  width: 200px;
+  margin-right: 100px;
+}
