@@ -6,17 +6,18 @@ version: '3.7'
 services:
   # App backend service
   app-server:
+    container_name: vgeorgo_project_organizer_server
     # Configuration for building the docker image for the backend service
     build:
       context: backend # Use an image built from the specified dockerfile in the `backend` directory.
       dockerfile: Dockerfile
     ports:
-      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      - "9090:9090" # Forward the exposed port 9090 on the container to port 9090 on the host machine
     restart: always
     depends_on: 
       - db # This service depends on mysql. Start that first.
     environment: # Pass environment variables to the service
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/polls?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/project_organizer?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root     
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
@@ -25,13 +26,14 @@ services:
 
   # Frontend Service 
   app-client:
+    container_name: vgeorgo_project_organizer_front
     build:
       context: frontend # Use an image built from the specified dockerfile in the `frontend` directory.
       dockerfile: Dockerfile
       args:
         APP_API_BASE_URL: http://127.0.0.1:8080/api
     ports:
-      - "9090:80" # Map the exposed port 80 on the container to port 9090 on the host machine
+      - "8080:8080" # Map the exposed port 80 on the container to port 9090 on the host machine
     restart: always
     depends_on:
       - app-server
@@ -40,6 +42,7 @@ services:
 
   # Database Service (Mysql)
   db:
+    container_name: vgeorgo_project_organizer_db
     image: mysql:5.7
     ports:
       - "3306:3306"
