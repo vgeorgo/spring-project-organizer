@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserRepository extends CustomRepositoryInterface<User, Long> {
     Optional<User> findByIdAndType(Long id, String type);
     List<User> findAllByType(String type);
+    User findTopByOrderByIdDesc();
 }

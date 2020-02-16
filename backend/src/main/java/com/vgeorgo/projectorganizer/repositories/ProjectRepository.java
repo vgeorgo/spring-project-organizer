@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProjectRepository extends CustomRepositoryInterface<Project, Long> {
-
+    Project findTopByOrderByIdDesc();
 }
