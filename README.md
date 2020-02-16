@@ -25,4 +25,5 @@ All mapped requests can be accessed in: <b>/docs/Insomnia*.json</b>
 Vue frontend is running on port 8080:<br/>
 http://localhost:8080
 
-## 
+## Additional Libraries
+- <b>Lombok:</b> to help with annotation getters and setters.
