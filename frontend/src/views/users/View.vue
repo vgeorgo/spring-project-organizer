@@ -18,6 +18,15 @@
       </div>
     </div>
     <div class="clearfix"></div>
+    <h5 v-if="user.subordinates">Subordinates</h5>
+    <div v-if="user.subordinates" class="user-subordinates">
+      <ul v-if="user.subordinates.length > 0">
+        <li v-for="s in user.subordinates" v-bind:key="s.id">
+          {{ s.id+': '+s.name }}
+        </li>
+      </ul>
+      <div v-else>No subordinates found.</div>
+    </div>
     <h5>Projects</h5>
     <div class="user-projects">
       <ul v-if="user.projects.length > 0">

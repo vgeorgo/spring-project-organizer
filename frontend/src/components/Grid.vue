@@ -4,6 +4,7 @@
     <table class="grid-table">
       <thead>
         <tr>
+          <th>Actions</th>
           <th v-for="key in columns"
             v-bind:key="key">
             {{ key | capitalize }}
@@ -12,16 +13,16 @@
       </thead>
       <tbody>
         <tr v-for="entry in gridData" v-bind:key="entry.id">
+          <td>
+            <router-link v-bind:to="`${baseRoute}/${entry.id}`">
+              <i class="fa fa-eye" aria-hidden="true"></i>
+            </router-link>
+            <router-link v-bind:to="`${baseRoute}/${entry.id}/edit`">
+              <i class="fa fa-edit" aria-hidden="true"></i>
+            </router-link>
+          </td>
           <td v-for="key in columns" v-bind:key="key">
-            <span v-if="key == 'id'">
-              <router-link v-bind:to="`${baseRoute}/${entry[key]}`">
-                <i class="fa fa-eye" aria-hidden="true"></i>
-              </router-link>
-              <router-link v-bind:to="`${baseRoute}/${entry[key]}/edit`">
-                <i class="fa fa-edit" aria-hidden="true"></i>
-              </router-link>
-            </span>
-            <span v-else>{{entry[key]}}</span>
+            {{entry[key]}}
           </td>
         </tr>
       </tbody>

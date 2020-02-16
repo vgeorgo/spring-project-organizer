@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,6 +42,8 @@ public class UserController {
         User updateUser = loadResource(id);
         updateUser.setName(user.getName());
         updateUser.setType(user.getType());
+        if(updateUser.getType().equals(User.DEVELOPER))
+            updateUser.setSubordinates(new ArrayList<>());
 
         // Relations
         updateUser.setSupervisor(user.getSupervisor());

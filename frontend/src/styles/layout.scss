@@ -48,3 +48,12 @@ h5 {
   clear: both;
   display: table;
 }
+
+.user-subordinates ul li {
+  display: inline;
+  margin-right: 30px;
+}
+
+.main-content__body h5 {
+  text-decoration: underline;
+}

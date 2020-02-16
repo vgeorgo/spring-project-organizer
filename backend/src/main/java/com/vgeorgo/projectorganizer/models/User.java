@@ -1,7 +1,5 @@
 package com.vgeorgo.projectorganizer.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vgeorgo.projectorganizer.validators.user.SupervisorValidation;
 import lombok.Getter;
@@ -13,7 +11,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.*;
 
@@ -41,14 +38,28 @@ public class User  implements Serializable {
     @Setter
     private String type;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     @RestResource(path = "supervisor", rel="supervisor")
-    @JsonIgnoreProperties(value = {"supervisor","projects"})
+    @JsonIgnoreProperties(value = {"supervisor","projects","subordinates"})
     @Getter
     @Setter
     @SupervisorValidation
     private User supervisor;
+
+    @OneToMany(mappedBy = "supervisor")
+    @RestResource(path = "subordinates", rel="subordinates")
+    @JsonIgnoreProperties(value = {"supervisor","projects","subordinates"})
+    @Getter
+    @Setter
+    private List<User> subordinates = new ArrayList<User>();
+
+    @ManyToMany(mappedBy = "developers", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"developers","leader"})
+    @RestResource(path = "projects")
+    @Getter
+    @Setter
+    private List<Project> projects = new ArrayList<Project>();
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -61,13 +72,6 @@ public class User  implements Serializable {
     @LastModifiedDate
     @Getter
     private Date updatedAt;
-
-    @ManyToMany(mappedBy = "developers", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = {"developers","leader"})
-    @RestResource(path = "projects")
-    @Getter
-    @Setter
-    private List<Project> projects = new ArrayList<Project>();
 
     /**
      * Set the type of the User as Supervisor

@@ -1,8 +1,6 @@
 package com.vgeorgo.projectorganizer.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.vgeorgo.projectorganizer.validators.user.SupervisorValidation;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -52,7 +50,7 @@ public class Project  implements Serializable {
     private Date updatedAt;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = {"projects","supervisor"})
+    @JsonIgnoreProperties(value = {"projects","supervisor","subordinates"})
     @RestResource(path = "developers")
     @JoinTable(name = "user_project",
             joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
