@@ -34,6 +34,7 @@ public class User  implements Serializable {
     private String name;
 
     @Column(nullable = false)
+    @NotBlank
     @Getter
     @Setter
     private String type;
