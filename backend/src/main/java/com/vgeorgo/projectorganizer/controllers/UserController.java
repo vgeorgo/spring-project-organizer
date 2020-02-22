@@ -52,7 +52,7 @@ public class UserController {
         return repository.refresh(updateUser);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
         User user = loadResource(id);
 

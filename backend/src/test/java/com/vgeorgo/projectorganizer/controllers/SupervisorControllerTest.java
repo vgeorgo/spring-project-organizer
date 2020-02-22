@@ -9,14 +9,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class DeveloperControllerTest
+class SupervisorControllerTest
 {
     @Autowired
     private MockMvc mockMvc;
@@ -26,16 +25,16 @@ class DeveloperControllerTest
 
     @Test
     public void shouldBeOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/developers")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/supervisors")
                 .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    public void whenListCreatedDeveloper_shouldReturn() throws Exception {
-        repository.save(UserFactory.createDeveloper("Fred"));
+    public void whenListCreatedSupervisor_shouldReturn() throws Exception {
+        repository.save(UserFactory.createSupervisor("Fred"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/developers")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/supervisors")
                 .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
@@ -44,33 +43,33 @@ class DeveloperControllerTest
     }
 
     @Test
-    public void whenListCreatedSupervisor_shouldNotReturn() throws Exception {
+    public void whenListCreatedDeveloper_shouldNotReturn() throws Exception {
         repository.save(UserFactory.createDeveloper("Fred"));
         repository.save(UserFactory.createSupervisor("Johnny"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/developers")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/supervisors")
                 .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Fred"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Johnny"));
     }
 
     @Test
-    public void whenFindDeveloper_shouldReturn() throws Exception {
-        repository.save(UserFactory.createDeveloper("Fred"));
+    public void whenFindSupervisor_shouldReturn() throws Exception {
+        repository.save(UserFactory.createSupervisor("Fred"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/developers/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/supervisors/1")
                 .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Fred"));;
     }
 
     @Test
-    public void whenFindSupervisor_shouldNotReturn() throws Exception {
-        repository.save(UserFactory.createSupervisor("Johnny"));
+    public void whenFindDeveloper_shouldNotReturn() throws Exception {
+        repository.save(UserFactory.createDeveloper("Johnny"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/developers/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/supervisors/1")
                 .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }

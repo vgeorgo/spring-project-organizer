@@ -5,7 +5,7 @@ Spring/Vue project to create projects and relating it to leaders and developers
 - Java 8
 - Spring Boot 2.2.4
 - Hibernate
-- JUnit 4.12
+- JUnit 5
 - Vue.js 2.5.16
 - MySQL 5.7
 
