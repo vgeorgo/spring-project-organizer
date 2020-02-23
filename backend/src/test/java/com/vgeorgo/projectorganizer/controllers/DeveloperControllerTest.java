@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class DeveloperControllerTest
-{
+class DeveloperControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -32,7 +32,7 @@ class DeveloperControllerTest
     }
 
     @Test
-    public void whenListCreatedDeveloper_shouldReturn() throws Exception {
+    public void whenListDeveloper_shouldReturn() throws Exception {
         repository.save(UserFactory.createDeveloper("Fred"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/developers")
@@ -44,7 +44,7 @@ class DeveloperControllerTest
     }
 
     @Test
-    public void whenListCreatedSupervisor_shouldNotReturn() throws Exception {
+    public void whenListSupervisor_shouldNotReturn() throws Exception {
         repository.save(UserFactory.createDeveloper("Fred"));
         repository.save(UserFactory.createSupervisor("Johnny"));
 

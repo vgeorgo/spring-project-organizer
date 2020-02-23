@@ -31,7 +31,7 @@ class SupervisorControllerTest
     }
 
     @Test
-    public void whenListCreatedSupervisor_shouldReturn() throws Exception {
+    public void whenListSupervisor_shouldReturn() throws Exception {
         repository.save(UserFactory.createSupervisor("Fred"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/supervisors")
@@ -43,7 +43,7 @@ class SupervisorControllerTest
     }
 
     @Test
-    public void whenListCreatedDeveloper_shouldNotReturn() throws Exception {
+    public void whenListDeveloper_shouldNotReturn() throws Exception {
         repository.save(UserFactory.createDeveloper("Fred"));
         repository.save(UserFactory.createSupervisor("Johnny"));
 

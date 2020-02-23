@@ -13,8 +13,11 @@ public class SupervisorValidator implements ConstraintValidator<SupervisorValida
 
     @Override
     public boolean isValid(User user, ConstraintValidatorContext constraintValidatorContext) {
-        if(user == null || user.getId() != null)
+        if(user == null)
             return true;
+
+        if(user.getId() == null)
+            return false;
 
         // Validates if the user really is a supervisor
         return repository.findByIdAndType(user.getId(), User.SUPERVISOR).isPresent();
