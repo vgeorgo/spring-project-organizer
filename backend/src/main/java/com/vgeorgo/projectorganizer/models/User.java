@@ -25,6 +25,7 @@ public class User  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
+    @Setter
     private Long id;
 
     @Column(nullable = false)
@@ -45,7 +46,6 @@ public class User  implements Serializable {
     @JsonIgnoreProperties(value = {"supervisor","projects","subordinates"})
     @Getter
     @Setter
-    @SupervisorValidation
     private User supervisor;
 
     @OneToMany(mappedBy = "supervisor")
@@ -55,7 +55,7 @@ public class User  implements Serializable {
     @Setter
     private List<User> subordinates = new ArrayList<User>();
 
-    @ManyToMany(mappedBy = "developers", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "developers")
     @JsonIgnoreProperties(value = {"developers","leader"})
     @RestResource(path = "projects")
     @Getter

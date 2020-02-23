@@ -1,8 +1,10 @@
 package com.vgeorgo.projectorganizer.controllers;
 
+import com.vgeorgo.projectorganizer.exceptions.business.InvalidSupervisorException;
 import com.vgeorgo.projectorganizer.exceptions.business.ResourceNotFoundException;
 import com.vgeorgo.projectorganizer.models.Project;
 import com.vgeorgo.projectorganizer.repositories.ProjectRepository;
+import com.vgeorgo.projectorganizer.validators.user.SupervisorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class ProjectController {
+
     @Autowired
     ProjectRepository repository;
 
@@ -33,14 +36,20 @@ public class ProjectController {
 
     @PostMapping("/projects")
     public Project store(@Valid @RequestBody Project project) {
+        if(!SupervisorValidator.isValid(project.getLeader()))
+            throw new InvalidSupervisorException("leader", project.getLeader().getId());
+
         return repository.save(project);
     }
 
     @PutMapping("/projects/{id}")
     public Project update(@PathVariable(value = "id") Long id, @Valid @RequestBody Project project) {
-        Project updateProject = loadResource(id);
+        if(!SupervisorValidator.isValid(project.getLeader()))
+            throw new InvalidSupervisorException("leader", project.getLeader().getId());
 
+        Project updateProject = loadResource(id);
         updateProject.setName(project.getName());
+
         // Relations
         updateProject.setLeader(project.getLeader());
 

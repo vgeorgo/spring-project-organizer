@@ -1,9 +1,9 @@
 package com.vgeorgo.projectorganizer.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vgeorgo.projectorganizer.factories.UserFactory;
 import com.vgeorgo.projectorganizer.models.User;
 import com.vgeorgo.projectorganizer.repositories.UserRepository;
+import com.vgeorgo.projectorganizer.support.data.Json;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,12 +61,11 @@ class UserControllerTest {
 
     @Test
     public void whenCreate_shouldReturn() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         User user = UserFactory.createDeveloper("Fred");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(user)))
+                .content(Json.encode(user)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Fred"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.type").value(User.DEVELOPER));
@@ -74,38 +73,49 @@ class UserControllerTest {
 
     @Test
     public void whenCreateNoType_shouldError() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         User user = UserFactory.createUser("Fred", null);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(user)))
+                .content(Json.encode(user)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
     public void whenUpdate_shouldReturn() throws Exception {
         repository.save(UserFactory.createSupervisor("Fred"));
-
-        ObjectMapper mapper = new ObjectMapper();
         User user = UserFactory.createSupervisor("Freddy");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(user)))
+                .content(Json.encode(user)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Freddy"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.type").value(User.SUPERVISOR));
     }
 
     @Test
+    public void whenUpdateSelfSupervisor_shouldError() throws Exception {
+        User user = UserFactory.createSupervisor("Fred");
+        repository.save(user);
+
+        User selfUser = new User();
+        selfUser.setId(1L);
+        user.setSupervisor(selfUser);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Json.encode(user)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
     public void whenUpdateNoExist_shouldError() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         User user = UserFactory.createSupervisor("Freddy");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(user)))
+                .content(Json.encode(user)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -114,13 +124,11 @@ class UserControllerTest {
         User supervisor = UserFactory.createSupervisor("Sup");
         repository.save(supervisor);
 
-        ObjectMapper mapper = new ObjectMapper();
-        User user = UserFactory.createDeveloper("Dev");
-        user.setSupervisor(supervisor);
+        User user = UserFactory.createDeveloper("Dev", supervisor);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(user)))
+                .content(Json.encode(user)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Dev"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.type").value(User.DEVELOPER))
@@ -133,13 +141,11 @@ class UserControllerTest {
         User supervisor = UserFactory.createSupervisor("Sup");
         repository.save(supervisor);
 
-        ObjectMapper mapper = new ObjectMapper();
-        User user = UserFactory.createDeveloper("Freddy");
-        user.setSupervisor(supervisor);
+        User user = UserFactory.createDeveloper("Freddy", supervisor);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(user)))
+                .content(Json.encode(user)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Freddy"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.type").value(User.DEVELOPER))
@@ -148,17 +154,14 @@ class UserControllerTest {
 
     @Test
     public void whenCreateWithInvalidSupervisor_shouldError() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-
         User invalidSupervisor = UserFactory.createDeveloper("Sup");
         repository.save(invalidSupervisor);
 
-        User user = UserFactory.createDeveloper("Fred");
-        user.setSupervisor(invalidSupervisor);
+        User user = UserFactory.createDeveloper("Fred", invalidSupervisor);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(user)))
+                .content(Json.encode(user)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

@@ -15,7 +15,7 @@ public class BadRequestException extends RuntimeException {
 
     public BadRequestException(String message, String fieldName, Object fieldValue) {
         super(message);
-        this.message = String.format("%s. %s : '%s'", message, fieldName, fieldValue);
+        this.message = String.format("%s. %s: '%s'", message, fieldName, fieldValue);
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
     }
