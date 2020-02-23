@@ -147,7 +147,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void whenCreateWithInvalidSupervisor_shouldReturn() throws Exception {
+    public void whenCreateWithInvalidSupervisor_shouldError() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
         User invalidSupervisor = UserFactory.createDeveloper("Sup");
