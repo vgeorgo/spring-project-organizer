@@ -20,7 +20,7 @@
           <option value="">Select</option>
           <option
             v-bind:key="supervisor.id"
-            v-for="supervisor in supervisors"
+            v-for="supervisor in availableSupervisors"
             :value="supervisor.id">
             {{supervisor.name}}
           </option>
@@ -56,6 +56,11 @@ export default {
     this.loadSupervisors();
     if (!this.$route.params || !this.$route.params.id) { return; }
     this.loadUser();
+  },
+  computed: {
+    availableSupervisors() {
+      return this.supervisors.filter((u) => u.id !== this.user.id);
+    },
   },
   methods: {
     loadSupervisors() {
